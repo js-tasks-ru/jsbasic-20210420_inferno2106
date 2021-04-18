@@ -10,8 +10,9 @@ function print(text) {
  * чтобы функция sayHello работала корректно
  */
 function isValid(name) {
-  let trimmed = name.trim();
-  if (trimmed && trimmed.length > 3) return trimmed;
+  if(name === null) return false;
+  let regex = /^[A-Za-z]{4,}$/;
+  return regex.test(name);
 }
 
 function sayHello() {
