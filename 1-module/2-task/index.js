@@ -1,3 +1,4 @@
+let regex = /^[A-Za-z]{4,}$/;
 /**
  * Эту функцию трогать не нужно
  */
@@ -11,7 +12,6 @@ function print(text) {
  */
 function isValid(name) {
   if(name === null) return false;
-  let regex = /^[A-Za-z]{4,}$/;
   return regex.test(name);
 }
 
