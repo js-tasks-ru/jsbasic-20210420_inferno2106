@@ -1,3 +1,4 @@
+// Руслан Минайчев
 function factorial(n) {
   let res = n;
   if (n === 0) return 1;

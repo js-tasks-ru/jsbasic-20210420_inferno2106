@@ -1,4 +1,5 @@
-let regex = /^[A-Za-z]{4,}$/;
+// Руслан Минайчев
+const REGEX = /^[A-Za-z]{4,}$/;
 /**
  * Эту функцию трогать не нужно
  */
@@ -12,7 +13,7 @@ function print(text) {
  */
 function isValid(name) {
   if(name === null) return false;
-  return regex.test(name);
+  return REGEX.test(name);
 }
 
 function sayHello() {
