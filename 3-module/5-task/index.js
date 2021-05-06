@@ -7,7 +7,6 @@ function getMinMax(str) {
   function findMin() {
     return Math.min(...filtered);
   }
-  console.log(filtered);
   return {
     min: findMin(),
     max: findMax(),
