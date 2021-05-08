@@ -1,7 +1,7 @@
 function sumSalary(salaries) {
   let sum = 0;
-  for (let i in salaries) {
-    if (isFinite(salaries[i]) && typeof salaries[i] === "number") sum += salaries[i];
+  for (let man in salaries) {
+    if (isFinite(salaries[man]) && typeof salaries[man] === "number") sum += salaries[man];
   }
   return sum;
 }
