@@ -1,3 +1,8 @@
+// Руслан Минайчев
 function ucFirst(str) {
-  // ваш код...
+  let checked = str.trim();
+  if(checked) {
+    checked = checked[0].toUpperCase() + checked.slice(1);
+  }
+  return checked;
 }

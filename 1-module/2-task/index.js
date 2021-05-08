@@ -1,3 +1,5 @@
+// Руслан Минайчев
+const REGEX = /^[A-Za-z]{4,}$/;
 /**
  * Эту функцию трогать не нужно
  */
@@ -10,7 +12,8 @@ function print(text) {
  * чтобы функция sayHello работала корректно
  */
 function isValid(name) {
-  // ваш код...
+  if(name === null) return false;
+  return REGEX.test(name);
 }
 
 function sayHello() {

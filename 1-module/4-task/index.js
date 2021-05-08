@@ -1,3 +1,8 @@
+// Руслан Минайчев
 function checkSpam(str) {
-  // ваш код...
+  const lowered = str.toLowerCase();
+  if(lowered.includes("1xbet") || lowered.includes("xxx")) {
+    return true;
+  } 
+  return false;
 }
