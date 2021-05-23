@@ -2,68 +2,72 @@ import createElement from '../../assets/lib/create-element.js';
 
 export default class Carousel {
   constructor(slides) {
-    this.data = slides;
-    this.bareUI = this.UICtrl();
-    this.curCount = 1,  
-    this.slides = this.data.length,
-    this.sum = 0
+    this._data = slides;
+    this._bareUI = this._outerPart();
+    this._curCount = 1,  
+    this._slides = this._data.length,
+    this._sum = 0
   }
 
   get elem() {
-    return this.createContent();
+    return this._createContent();
   }
-  createEvent(outerEl, id) {
+  _onArrowRightClick() {
+    this._obtainTags();
+    this._sum -= this.imgWidth;
+    this._curCount++;
+    this._checkCount();
+  }
+  _onArrowLeftClick() {
+    this._obtainTags();
+    this._sum += this.imgWidth;
+    this._curCount--;
+    this._checkCount();
+  }
+    _checkCount() {
+    if(this._curCount === 1) {
+      this._hideUI(this.arrowLeft);
+      this._sum = 0; 
+    }
+    else if(this._curCount < this._slides) {
+      this._showUI(this.arrowRight);
+    }
+
+    if(this._curCount === this._slides) {
+      this._hideUI(this.arrowRight);
+      this._sum = -this.imgWidth * (this._slides - 1);
+    } 
+    else if(this._curCount > 1) {
+      this._showUI(this.arrowLeft);
+    }
+    this._outerEl.querySelector('.carousel__inner').style.transform = `translateX(${this._sum}px)`;
+  }
+  _createEvent(ev) {
+    let div = ev.target.closest('button').parentElement.parentElement.parentElement.parentElement;
     let event = new CustomEvent("product-add", {
       bubbles: true,
-      detail: id
+      detail: ev.target.closest('button').parentElement.parentElement.dataset.id
     })
-    outerEl.addEventListener("product-add", (ev) => {
-      console.log(ev);
+    div.addEventListener("product-add", (ev) => {
     }, {once: true});
-    outerEl.dispatchEvent(event);
+    div.dispatchEvent(event);
     
   }
-  addEvents(outerEl) {
+  _addEvents() {
     // Левая стрелка
-    outerEl.querySelector('.carousel__arrow_left').addEventListener('click', (ev) => {
-      this.obtainTags(outerEl);
-      this.sum += this.imgWidth;
-      this.curCount--;
-     
-      if(this.curCount === 1) {
-        this.hideUI(this.arrowLeft);
-        this.sum = 0; 
-      }
-      else if(this.curCount < this.slides) {
-        this.showUI(this.arrowRight);
-      }
-      outerEl.querySelector('.carousel__inner').style.transform = `translateX(${this.sum}px)`;  
-    });
+    this._outerEl.querySelector('.carousel__arrow_left').addEventListener('click', () => this._onArrowLeftClick());
     // Правая стрелка
-    outerEl.querySelector('.carousel__arrow_right').addEventListener('click', (ev) => {
-      this.obtainTags(outerEl);
-      this.sum -= this.imgWidth;
-      this.curCount++;
-      
-      if(this.curCount === this.slides) {
-        this.hideUI(this.arrowRight);
-        this.sum = -this.imgWidth * (this.slides - 1);
-      } 
-      else if(this.curCount > 1) {
-        this.showUI(this.arrowLeft);
-      }
-      outerEl.querySelector('.carousel__inner').style.transform = `translateX(${this.sum}px)`;
-    });
+    this._outerEl.querySelector('.carousel__arrow_right').addEventListener('click', () => this._onArrowRightClick());
   }
-  hideUI(el) {
+   _hideUI(el) {
     el.style.display = 'none';
   }
-  showUI(el) {
+   _showUI(el) {
     el.style.display = 'flex';
   }
-  UICtrl() {
+  _innerPart() {
     let html = ``;
-    this.data.forEach(item => {
+    this._data.forEach(item => {
       html += `
       <div class="carousel__slide" data-id="${item.id}">
         <img src="/assets/images/carousel/${item.image}" class="carousel__img" alt="slide">
@@ -79,17 +83,8 @@ export default class Carousel {
     })
     return html;
   }
-  obtainTags(outerEl) {
-    this.arrowLeft = outerEl.querySelector('.carousel__arrow_left'),
-    this.arrowRight = outerEl.querySelector('.carousel__arrow_right'),
-    this.list = outerEl.querySelector('.carousel__inner'),
-    this.imgWidth = outerEl.querySelector('.carousel__slide').offsetWidth
-  }
-
-  createContent() {
-    let outerEl = document.createElement('div');
-    outerEl.className = 'carousel';
-    outerEl.innerHTML = `
+  _outerPart() {
+    return `
     <div class="carousel__arrow carousel__arrow_right">
       <img src="/assets/images/icons/angle-icon.svg" alt="icon">
     </div>
@@ -97,17 +92,28 @@ export default class Carousel {
       <img src="/assets/images/icons/angle-left-icon.svg" alt="icon">
     </div>
     <div class="carousel__inner">
-      ${this.UICtrl()}
+      ${this._innerPart()}
     </div>
-    `;
+    `
+  }
+  _obtainTags() {
+    this.arrowLeft = this._outerEl.querySelector('.carousel__arrow_left'),
+    this.arrowRight = this._outerEl.querySelector('.carousel__arrow_right'),
+    this.list = this._outerEl.querySelector('.carousel__inner'),
+    this.imgWidth = this._outerEl.querySelector('.carousel__slide').offsetWidth
+  }
+
+  _createContent() {
+    let outerEl = createElement(this._outerPart());
+    outerEl.className = 'carousel';
+    this._outerEl = outerEl;
+
+    this._addEvents();
+    this._hideUI(outerEl.querySelector('.carousel__arrow_left'));
     
-    this.addEvents(outerEl);
-    this.hideUI(outerEl.querySelector('.carousel__arrow_left'));
-    
+
     outerEl.querySelectorAll('.carousel__button').forEach(item => {
-      item.addEventListener('click', (ev) => {
-      this.createEvent(outerEl, ev.target.closest('button').parentElement.parentElement.dataset.id);
-    });
+      item.addEventListener('click', this._createEvent);
    });
     
     return outerEl;

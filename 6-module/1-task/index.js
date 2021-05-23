@@ -12,39 +12,14 @@
  *      }
  *
  */
- let rows = [
-  {
-    name: 'Ilia',
-    age: 25,
-    salary: 1000,
-    city: 'Petrozavodsk'
-  },
-  {
-    name: 'Vasya',
-    age: 14,
-    salary: 1500,
-    city: 'Moscow'
-  },
-  {
-    name: 'Ivan',
-    age: 22,
-    salary: 100,
-    city: 'Bryansk'
-  },
-  {
-    name: 'Petya',
-    age: 45,
-    salary: 990,
-    city: 'Chita'
-  }
-];
+ 
 
 export default class UserTable {
-  _wholeTable;
   constructor(rows) {
-    // this.elem = _wholeTable;
+    this._data = rows;
+    this._rendered = this._render();
   }
-  outerLayer() {
+  _outerLayer() {
     return `<thead>
                   <tr>
                     <th>Имя</th>
@@ -55,33 +30,36 @@ export default class UserTable {
                   </tr>
                 </thead>
                 <tbody>
-                ${this.innerLayer()}
+                ${this._innerLayer()}
                 </tbody>
             `
   }
-  innerLayer() {
+  _innerLayer() {
     let html = '';
-    rows.map(item => {
+    this._data.map(item => {
       html += `<tr>
                  <td>${item.name}</td>
                  <td>${item.age}</td>
                  <td>${item.salary}</td>
                  <td>${item.city}</td>
-                 <td>${this.xBtn()}</td>
+                 <td><button>X</button></td>
                </tr>
               `
     })
     return html;
+  } 
+  _addxBtn(buttons) {
+    buttons.forEach(btn => btn.addEventListener('click', () => btn.parentElement.parentElement.remove()))
   }
-  xBtn() {
-    return `<button onclick='this.parentElement.parentElement.remove()'>X</button>`
-  }
-  render() {
+ 
+  _render() {
     let elem = document.createElement('table');
-    elem.innerHTML = this.outerLayer();
+    elem.innerHTML = this._outerLayer();
+
+    this._addxBtn(elem.querySelectorAll('button'));
     return elem;
   }
   get elem() {
-    return this.render();
+    return this._rendered;
   }
 }

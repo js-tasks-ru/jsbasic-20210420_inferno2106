@@ -5,62 +5,62 @@ import createElement from '../../assets/lib/create-element.js';
 export default class ProductCard {
   
   get elem() {
-    return this.shell;
+    return this._rendered;
   }
   
   constructor({name, price, category, image, id} = {}) {
-    this.name = name;
-    this.price = price.toFixed(2);
-    this.category = category;
-    this.image = image;
-    this.id = id;
-    this.shell = this.render();
+    this._name = name;
+    this._price = price.toFixed(2);
+    this._category = category;
+    this._image = image;
+    this._id = id;
+    this._rendered = this._render();
   }
 
-  createEvent(shell) {
+  static _createEvent(shell) {
     let event = new CustomEvent('product-add', {
       bubbles: true,
       detail: this.id
     })
+    
     shell.addEventListener('product-add', (ev) => {}, { once: true });
     shell.dispatchEvent(event);
-    
   }
-  upperPart() {
+  _upperPart() {
     return `
     <div class="card__top">
-      <img src="/assets/images/products/${this.image}" class="card__image" alt="product">
-      <span class="card__price">€${this.price}</span>
+      <img src="/assets/images/products/${this._image}" class="card__image" alt="product">
+      <span class="card__price">€${this._price}</span>
     </div>
     `
   }
-  bottomPart() {
+  _bottomPart() {
     return `
     <div class="card__body">
-      <div class="card__title">${this.name}</div>
+      <div class="card__title">${this._name}</div>
       <button type="button" class="card__button">
           <img src="/assets/images/icons/plus-icon.svg" alt="icon">
       </button>
     </div>
     `
   }
-  makeShell() {
+  _makeShell() {
     return `
-      ${this.upperPart()}
-      ${this.bottomPart()}
+      ${this._upperPart()}
+      ${this._bottomPart()}
     `
   }
-  render() {
-    let shell = document.createElement('div');
+  _onCardBtnClick(shell) {
+   ProductCard._createEvent(shell);
+  }
+  _render() {
+    let shell = createElement(this._makeShell());
     shell.className = 'card';
-    shell.innerHTML = this.makeShell();
     
-    shell.querySelector('.card__button').addEventListener('click', () => {
-      this.createEvent(shell);
-    });
+    shell.querySelector('.card__button').addEventListener('click', () => this._onCardBtnClick(shell));
     return shell;
   }
-
+  
 }
 
 
