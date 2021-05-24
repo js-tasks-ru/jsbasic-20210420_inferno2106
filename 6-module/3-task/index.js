@@ -48,9 +48,10 @@ export default class Carousel {
       bubbles: true,
       detail: ev.target.closest('button').parentElement.parentElement.dataset.id
     })
+    div.dispatchEvent(event);
     div.addEventListener("product-add", (ev) => { console.log(ev)
     }, {once: true});
-    div.dispatchEvent(event);
+    
     
   }
   _addEvents() {
