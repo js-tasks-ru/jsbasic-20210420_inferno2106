@@ -17,13 +17,13 @@ export default class ProductCard {
     this._rendered = this._render();
   }
 
-  static _createEvent(shell) {
+   _createEvent(shell) {
     let event = new CustomEvent('product-add', {
       bubbles: true,
-      detail: this.id
+      detail: this._id
     })
     
-    shell.addEventListener('product-add', (ev) => {}, { once: true });
+    shell.addEventListener('product-add', (ev) => { console.log(ev)}, { once: true });
     shell.dispatchEvent(event);
   }
   _upperPart() {
@@ -51,7 +51,7 @@ export default class ProductCard {
     `
   }
   _onCardBtnClick(shell) {
-   ProductCard._createEvent(shell);
+   this._createEvent(shell);
   }
   _render() {
     let shell = createElement(this._makeShell());
