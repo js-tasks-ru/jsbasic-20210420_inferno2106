@@ -7,11 +7,9 @@ export default class Carousel {
     this._curCount = 1,  
     this._slides = this._data.length,
     this._sum = 0
+    this.elem = this._createContent()
   }
-
-  get elem() {
-    return this._createContent();
-  }
+  
   _onArrowRightClick() {
     this._obtainTags();
     this._sum -= this.imgWidth;
@@ -43,16 +41,12 @@ export default class Carousel {
     this._outerEl.querySelector('.carousel__inner').style.transform = `translateX(${this._sum}px)`;
   }
   _createEvent(ev) {
-    let div = ev.target.closest('button').parentElement.parentElement.parentElement.parentElement;
+    let div = ev.target.closest('.carousel');
     let event = new CustomEvent("product-add", {
       bubbles: true,
-      detail: ev.target.closest('button').parentElement.parentElement.dataset.id
+      detail: ev.target.closest("[data-id]").dataset.id
     })
     div.dispatchEvent(event);
-    div.addEventListener("product-add", (ev) => { console.log(ev)
-    }, {once: true});
-    
-    
   }
   _addEvents() {
     // Левая стрелка
@@ -86,14 +80,16 @@ export default class Carousel {
   }
   _outerPart() {
     return `
-    <div class="carousel__arrow carousel__arrow_right">
-      <img src="/assets/images/icons/angle-icon.svg" alt="icon">
-    </div>
-    <div class="carousel__arrow carousel__arrow_left">
-      <img src="/assets/images/icons/angle-left-icon.svg" alt="icon">
-    </div>
-    <div class="carousel__inner">
-      ${this._innerPart()}
+    <div class='carousel'>
+      <div class="carousel__arrow carousel__arrow_right">
+        <img src="/assets/images/icons/angle-icon.svg" alt="icon">
+      </div>
+      <div class="carousel__arrow carousel__arrow_left">
+        <img src="/assets/images/icons/angle-left-icon.svg" alt="icon">
+      </div>
+      <div class="carousel__inner">
+        ${this._innerPart()}
+      </div>
     </div>
     `
   }
@@ -106,7 +102,6 @@ export default class Carousel {
 
   _createContent() {
     let outerEl = createElement(this._outerPart());
-    outerEl.className = 'carousel';
     this._outerEl = outerEl;
 
     this._addEvents();

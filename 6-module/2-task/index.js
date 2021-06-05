@@ -23,14 +23,16 @@ export default class ProductCard {
       detail: this._id
     })
     
-    shell.addEventListener('product-add', (ev) => { console.log(ev)}, { once: true });
     shell.dispatchEvent(event);
   }
   _upperPart() {
     return `
+    <div class="card">
     <div class="card__top">
       <img src="/assets/images/products/${this._image}" class="card__image" alt="product">
       <span class="card__price">€${this._price}</span>
+    </div>
+    ${this._bottomPart()}
     </div>
     `
   }
@@ -42,12 +44,12 @@ export default class ProductCard {
           <img src="/assets/images/icons/plus-icon.svg" alt="icon">
       </button>
     </div>
+    
     `
   }
   _makeShell() {
     return `
       ${this._upperPart()}
-      ${this._bottomPart()}
     `
   }
   _onCardBtnClick(shell) {
@@ -55,7 +57,6 @@ export default class ProductCard {
   }
   _render() {
     let shell = createElement(this._makeShell());
-    shell.className = 'card';
     
     shell.querySelector('.card__button').addEventListener('click', () => this._onCardBtnClick(shell));
     return shell;

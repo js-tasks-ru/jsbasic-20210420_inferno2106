@@ -3,23 +3,24 @@ import createElement from '../../assets/lib/create-element.js';
 export default class RibbonMenu {
   constructor(categories) {
     this._categories = categories;
+    this.elem = this._render();
   }
-  get elem() {
-    return this._render();
-  }
+  
   _createOuter() {
     return `
-    <button class="ribbon__arrow ribbon__arrow_left">
-      <img src="/assets/images/icons/angle-icon.svg" alt="icon">
-    </button>
+    <div class='ribbon'>
+      <button class="ribbon__arrow ribbon__arrow_left">
+        <img src="/assets/images/icons/angle-icon.svg" alt="icon">
+      </button>
 
-    <nav class="ribbon__inner">
-      ${this._createItems()}
-    </nav>
+      <nav class="ribbon__inner">
+        ${this._createItems()}
+      </nav>
 
-    <button class="ribbon__arrow ribbon__arrow_right ribbon__arrow_visible">
-      <img src="/assets/images/icons/angle-icon.svg" alt="icon">
-    </button>
+      <button class="ribbon__arrow ribbon__arrow_right ribbon__arrow_visible">
+        <img src="/assets/images/icons/angle-icon.svg" alt="icon">
+      </button>
+    </div>
     `;
   }
   _createItems() {
@@ -46,8 +47,6 @@ export default class RibbonMenu {
   }
   _render() {
     let el = createElement(this._createOuter());
-    el.classList.add('ribbon');
-
     this._addEvents(el);
     return el;
   }
@@ -84,13 +83,11 @@ export default class RibbonMenu {
     if(ev.target.classList.contains('ribbon__item')) {
       ev.target.classList.add('ribbon__item_active');
     }
-    setTimeout(()=> {
-      let event = new CustomEvent('ribbon-select', {
-        detail: ev.target.closest('.ribbon__item').dataset.id,
-        bubbles: true
-      })
-      parent.parentElement.dispatchEvent(event);
-      parent.parentElement.addEventListener('ribbon-select', (ev) => { console.log(ev);}, {once: true});
-    }, 0)
+    
+    let event = new CustomEvent('ribbon-select', {
+      detail: ev.target.closest('[data-id]').dataset.id,
+      bubbles: true
+    })
+    parent.parentElement.dispatchEvent(event);
   }
 }
